@@ -9,8 +9,8 @@ Es unterstützt sowohl den **direkten Abruf über die YouTube-API** (via `youtub
 
 ### 1. Repository klonen
 ```bash
-git clone https://github.com/<dein-user>/py_yt_exporter.git
-cd py_yt_exporter
+git clone https://github.com/<dein-user>/py_yt_html_extractor.git
+cd py_yt_html_extractor
 ```
 
 ### 2. Virtuelle Umgebung erstellen und aktivieren
@@ -30,8 +30,7 @@ pip install -r requirements.txt
 
 | Datei | Beschreibung |
 |-------|---------------|
-| `yt_text_extractor.py` | Holt Transkripte direkt über die YouTube-API (Online-Abruf). |
-| `extract_from_html.py` | Extrahiert Transkripte aus lokal gespeicherten HTML-Dateien (Offline-Variante). |
+| `py_yt_html_extractor.py` | Extrahiert Transkripte aus lokal gespeicherten HTML-Dateien (Offline-Variante). |
 | `combine.sh` | Bash-Skript zum automatischen Zusammenführen aller erzeugten Chunks. |
 | `requirements.txt` | Liste der benötigten Python-Pakete. |
 | `.gitignore` | Ignoriert Cache-Dateien, venv, Output-Dateien usw. |
@@ -40,35 +39,7 @@ pip install -r requirements.txt
 
 ## ▶️ Nutzung
 
-### 1. Variante A – Online-Abruf über YouTube API
-
-Extrahiert Transkripte direkt von YouTube (öffentliche Videos mit Transkript).  
-Erfordert Internetverbindung und installiertes Paket `youtube-transcript-api`.
-
-```bash
-python yt_text_extractor.py --yt "https://www.youtube.com/watch?v=<VIDEO_ID>" --lang de
-```
-
-#### Beispiele
-
-```bash
-# Standard (deutsch bevorzugt)
-python yt_text_extractor.py --yt "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --lang de
-
-# Fallback auf Englisch erlauben
-python yt_text_extractor.py --yt "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --lang de,en
-
-# Mit Zeitstempeln behalten
-python yt_text_extractor.py --yt "https://www.youtube.com/watch?v=dQw4w9WgXcQ" --keep-timestamps
-```
-
-Ergebnis:
-- `<video-title>_transcript.txt`
-- `<video-title>_part_001.txt`, `_part_002.txt`, …
-
----
-
-### 2. Variante B – Offline-Extraktion aus lokalem HTML
+### Offline-Extraktion aus lokalem HTML
 
 Wenn YouTube kein direktes API-Transkript liefert oder du offline arbeiten willst:  
 1. Öffne das Video → Menü → **„Transkript anzeigen“**  
@@ -77,7 +48,7 @@ Wenn YouTube kein direktes API-Transkript liefert oder du offline arbeiten wills
 
 Dann:
 ```bash
-python extract_from_html.py /pfad/zum/transkript.html
+python py_yt_html_extractor.py /pfad/zum/transkript.html
 ```
 
 Das Skript:
@@ -94,18 +65,18 @@ Optional kannst du einen anderen Zielpfad mit `--out-dir` angeben.
 
 ```bash
 # Standard – alles bereinigt
-python extract_from_html.py mein_video.html
+python py_yt_html_extractor.py mein_video.html
 
 # Zeitstempel behalten
-python extract_from_html.py mein_video.html --keep-timestamps
+python py_yt_html_extractor.py mein_video.html --keep-timestamps
 
 # Cues ([Music], [Applause]) behalten
-python extract_from_html.py mein_video.html --keep-cues
+python py_yt_html_extractor.py mein_video.html --keep-cues
 ```
 
 ---
 
-### 3. Chunks zusammenführen
+### Chunks zusammenführen
 
 Mitgeliefertes Bash-Skript `combine.sh`:
 ```bash
@@ -124,7 +95,6 @@ Beispiel:
 ## 💡 Hinweise
 
 - Nicht jedes Video hat ein maschinenlesbares Transkript.  
-- Die API-Variante kann nur **öffentliche Videos** abrufen.  
 - HTML-Variante funktioniert auch offline, solange der Transkript-Code sichtbar ist.  
 - Chunks sind standardmäßig 12 000 Zeichen groß mit 500 Zeichen Überlappung (vermeidbarer Kontextverlust).
 
@@ -135,8 +105,6 @@ Beispiel:
 ```txt
 beautifulsoup4>=4.12.0
 lxml>=4.9.0
-youtube-transcript-api==0.6.2
-langdetect>=1.0.9   # optional
 ```
 
 ---
@@ -144,4 +112,3 @@ langdetect>=1.0.9   # optional
 ## 📜 Lizenz
 
 MIT License © 2025 – frei verwendbar für private & kommerzielle Projekte.
-````
